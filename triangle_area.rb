@@ -1,7 +1,8 @@
 puts 'Введите размер основания треугольника, см.'
-triangleBase = gets.chomp
+triangleBase = gets.chomp.to_i
 
 puts 'Введите высоту треугольника, см.'
-triangleHeight = gets.chomp
+triangleHeight = gets.chomp.to_i
 
-puts "Площадь вашего треугольника: #{1/2*base*height}, см "
+puts "Площадь вашего треугольника: #{1.0 / 2* triangleBase * triangleHeight}, см "
+
