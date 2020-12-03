@@ -14,31 +14,32 @@ if sideA == sideB && sideA == sideC
 elsif sideA == sideB || sideA == sideC || sideB == sideC
   puts 'У Вас равнобедренный треугольник'
 
-else
-  if sideA > sideB && sideA > sideC
+else 
+  hypotenuse = [sideA, sideB, sideC].max
+
+  puts hypotenuse
+
+  if sideA == hypotenuse
     hypotenuse = sideA
     hypotenuseName = 'сторона А'
-    leg1 = sideB
-    leg2 = sideC
+    legSum = sideB ** 2 + sideC ** 2
 
-  elsif sideB > sideA && sideB > sideC
-    hypotenuse = sideB
+  elsif sideB == hypotenuse
     hypotenuseName = 'сторона B'
-    leg1 = sideA
-    leg2 = sideC
+    legSum = sideA ** 2 + sideC ** 2
 
-  else sideC > sideA && sideC > sideA
-    hypotenuse = sideC
+  else sideC == hypotenuse
     hypotenuseName = 'сторона С'
-    leg1 = sideA
-    leg2 = sideB
+    legSum = sideA ** 2 + sideB ** 2
   end
 
   puts "Гипотинуза: #{hypotenuseName} ее длина #{hypotenuse}"
 
-  if hypotenuse == Math.sqrt(leg1 ** 2 + leg2 ** 2)
+  if hypotenuse == Math.sqrt(legSum)
     puts 'У вас прямоугольный треугольник'
+
   else
     puts 'У вас не прямоугольный треугольник'
+    
   end
 end
