@@ -36,7 +36,7 @@ else
 
   puts "Гипотинуза: #{hypotenuseName} ее длина #{hypotenuse}"
 
-  if hypotenuse == Math.sqrt(leg1**2 + leg2**2)
+  if hypotenuse == Math.sqrt(leg1 ** 2 + leg2 ** 2)
     puts 'У вас прямоугольный треугольник'
   else
     puts 'У вас не прямоугольный треугольник'
