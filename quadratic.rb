@@ -18,8 +18,8 @@ if descriminant < 0
   puts 'У вашего квадратного уровнения нет корней. =('
 elsif descriminant > 0
   sqrtDescr = Math.sqrt(descriminant)
-  x1 = (-coefB + sqrtDescr)/ 2 * coefA 
-  x2 = (-coefB - sqrtDescr)/ 2 * coefA 
+  x1 = (-coefB + sqrtDescr) / 2 * coefA 
+  x2 = (-coefB - sqrtDescr) / 2 * coefA 
   puts "Дискрименант равен: #{descriminant}. Для вашего квадратного уровная найдены следующие корни:"
   puts "x1 = #{x1}"
   puts "x2 = #{x2}"
