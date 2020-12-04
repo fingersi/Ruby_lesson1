@@ -1,45 +1,45 @@
 puts 'Введите длину стороны A.'
-sideA = gets.chomp.to_i
+side_a = gets.chomp.to_f
 
 puts 'Введите длину стороны B.'
-sideB = gets.chomp.to_i
+side_b = gets.chomp.to_f
 
 puts 'Введите длину стороны C.'
-sideC = gets.chomp.to_i
+side_c = gets.chomp.to_f
 
 
-if sideA == sideB && sideA == sideC
+if side_a == side_b && side_a == side_c
   puts 'У вас равносторонний треугольник.'
 
-elsif sideA == sideB || sideA == sideC || sideB == sideC
+elsif side_a == side_b || side_a == side_c || side_b == side_c
   puts 'У Вас равнобедренный треугольник'
 
 else 
-  hypotenuse = [sideA, sideB, sideC].max
+  hypotenuse = [side_a, side_b, side_c].max
 
   puts hypotenuse
 
-  if sideA == hypotenuse
-    hypotenuse = sideA
-    hypotenuseName = 'сторона А'
-    legSum = sideB ** 2 + sideC ** 2
+  if side_a == hypotenuse
+    hypotenuse = side_a
+    hypotenuse_name = 'сторона А'
+    leg_sum = side_b ** 2 + side_c ** 2
 
-  elsif sideB == hypotenuse
+  elsif side_b == hypotenuse
     hypotenuseName = 'сторона B'
-    legSum = sideA ** 2 + sideC ** 2
+    leg_sum = side_a ** 2 + side_c ** 2
 
-  else sideC == hypotenuse
+  else side_c == hypotenuse
     hypotenuseName = 'сторона С'
-    legSum = sideA ** 2 + sideB ** 2
+    leg_sum = side_a ** 2 + side_b ** 2
   end
 
   puts "Гипотинуза: #{hypotenuseName} ее длина #{hypotenuse}"
 
-  if hypotenuse == Math.sqrt(legSum)
+  if hypotenuse == Math.sqrt(leg_sum)
     puts 'У вас прямоугольный треугольник'
 
   else
     puts 'У вас не прямоугольный треугольник'
-    
+
   end
 end
