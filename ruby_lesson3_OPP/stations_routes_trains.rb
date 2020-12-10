@@ -15,7 +15,7 @@ class Station
     if @trains.nil?
       puts 'There is on trains at station' 
     end
-    self.list_trains(@trains.select{ |train| train.type == type })
+      self.list_trains(@trains.select{ |train| train.type == type })
   end
 
   def trains_by_type(type)
@@ -100,18 +100,8 @@ class Train
 
     end
   end
-  
-  def check_train_type(type)
-    if type == 'cargo'
-      return 'cargo'
-    elsif type == 'passangers'
-      return 'passangers'
-    else
-      puts 'input error check train type'
-    end
-  end
 
-  def brake 
+  def stop 
     @speed = 0
   end
 
@@ -131,7 +121,6 @@ class Train
 
   def add_train_car
     if @speed == 0
-
       @train_cars_number += 1
       puts "You have added on train car.
        train_cars_number: #{@train_cars_number}"
@@ -176,7 +165,6 @@ class Train
       if station == @current_station
         index == 0 ? prev_st = nil : prev_st = builded_route[index - 1]
         index == builded_route.size ? next_st = nil : next_st = builded_route[index + 1]
-  
         return [prev_st, @current_station, next_st]
       end
       index += 1
@@ -191,7 +179,6 @@ class Train
   end
 
   def show_station_on_route
-    puts " stations_on_route: #{stations_on_route.class}"
     self.stations_on_route.each{ |station| puts station.name if !station.nil?}
   end
   
