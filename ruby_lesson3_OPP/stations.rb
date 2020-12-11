@@ -3,7 +3,7 @@ class Station
 
   def initialize(name)
     @name = name
-    @trains = []
+    #@trains = []
   end
 
   def list_trains(trains = @trains)
@@ -22,8 +22,7 @@ class Station
       puts 'There is on trains at station' 
     end
       self.list_trains(@trains.select{ |train| train.type_id == type_id })
-  end
-
+  end 
 
   def trains_by_type(type)
     @trains.each{|train| puts train.number if train.type == type}

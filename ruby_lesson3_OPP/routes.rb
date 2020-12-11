@@ -1,6 +1,4 @@
 class Route
-  attr_reader :departure_station, :arrival_station, :way_stations
-
   def initialize(departure_station, arrival_station)
     @departure_station = departure_station
     @arrival_station = arrival_station
@@ -18,15 +16,10 @@ class Route
   end
 
   def show_stations
-    self.build_route.each{|station| puts station.name}
+    self.stations.each{|station| puts station.name}
   end
 
-  def build_route
-    build_route = []
-    build_route << departure_station
-    @way_stations.each{ |way_station| build_route << way_station }
-    build_route << arrival_station
-    return build_route
+  def stations
+    [@departure_station, @way_stations, @arrival_station].flatten
   end
-
 end
