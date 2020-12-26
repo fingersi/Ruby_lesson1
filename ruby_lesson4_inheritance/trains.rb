@@ -161,7 +161,7 @@ class Train
     else
       number.times { self.train_cars << PassengerTrainCar.new } 
     end
-    puts "#{number} trains cars has been added. Now train #{@number} has #{@train_cars.size}"
+    puts "Train #{@number} has #{@train_cars.size} train cars"
   end
 
   def delete_train_cars(number)

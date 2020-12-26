@@ -1,7 +1,11 @@
 class UserInterface
+
   def initialize(texts)
     @texts = texts
+    @middleware = MiddleWare.new(texts)
   end
+
+# Основной метод в классе, поэтому публичный вызывает все остальные.
   def action_select
     loop do
       puts @texts.select_action
@@ -12,15 +16,15 @@ class UserInterface
       when '1'
         display_input
       when '2'
-        station_input
+        create_station
       when '3'
-        route_input
+        create_route
       when '4'
-        train_input
+        create_train
       when '5'
         route_edit
       when '6'
-        train_input
+        trains_on_station
       when '7'
         train_move
       when '8'
@@ -33,6 +37,9 @@ class UserInterface
     end
   end
 
+ protected
+
+ #Не публичный, запускается из 
   def display_input
     puts @texts.display_select
     user_input = gets.chomp.to_i
@@ -51,7 +58,8 @@ class UserInterface
     end
   end
 
-  def station_input
+#Не публичный, используется только внутри интерфейса
+  def create_station
     loop do
       puts @texts.add_station
       station_name = gets.chomp
@@ -65,16 +73,18 @@ class UserInterface
     end
   end
 
-  def route_input
+#Не публичный, используется только внутри интерфейса
+  def create_route
     puts @texts.add_route
     if Station.method_defined?(:stations) && Station.stations.size >= 1
       puts @texts.you_need_2_stations
     end
-    stations_index = station_select
+    stations_index = @middleware.route_station_select
     route = Route.new(Station.stations[stations_index[0]], Station.stations[stations_index[1]])
     user_input_way_stations(route)
   end
 
+#Не публичный, используется только внутри интерфейса
   def user_input_way_stations(route)
     loop do
       puts @texts.add_way_stations
@@ -83,7 +93,7 @@ class UserInterface
       when 0
         break
       when 1
-        choose_for_add_stations(route)
+        @middleware.add_stations_route(route)
         break
       else
         puts @texts.wrong_input
@@ -91,57 +101,7 @@ class UserInterface
     end
   end
 
-  def choose_for_add_stations(route)
-    loop do
-      memo = available_to_adding(route)
-      stations_show(memo)
-      puts 'Enter station index, for stop enter stop'
-      user_input = gets.chomp
-      if user_input == 'stop'
-        break
-      elsif !user_input.nil?
-        route.add_station(Station.find_by_name(memo[user_input.to_i]))
-      else
-        puts @texts.wrong_input
-      end
-    end
-  end
-  
-  def stations_show(hash)
-    if !hash.nil?
-     hash.each{|key, value| puts"key #{key} value #{value}"}
-    else
-      puts 'No station to adding' 
-    end
-  end
-
-  def available_to_adding(route)
-    route_stations = route.stations
-    puts "route_stations: #{route_stations}"
-    stations = {}
-    i = 0
-    Station.stations.each do |station|
-      puts "Station.name #{station.name}"
-      if !route_stations.detect {|st| st.name == station.name }
-        stations[i] = station.name
-        i += 1
-      end
-    end
-    return stations
-  end
-
-  def station_select
-    loop do
-      Station.show_all_stations
-      puts @texts.choose_departure_station
-      departure_station_index = gets.chomp.to_i
-      puts @texts.choose_arrival_station
-      arrival_station_index = gets.chomp.to_i
-      departure_station_index == arrival_station_index ? (puts @text.wrong_input) :
-        (return [departure_station_index, arrival_station_index])
-    end
-  end
-
+# Не публичный, используется только внутри интерфейса
   def route_edit
     loop do
       puts @texts.route_edit
@@ -150,10 +110,10 @@ class UserInterface
       when  0
         break
       when  1
-        choose_for_add_stations(select_route)
+        @middleware.add_stations_route(@middleware.select_route)
         break
       when  2
-        delete_station(select_route)
+        @middleware.delete_station_route(@middleware.select_route)
         break
       else
         puts @texts.wrong_input
@@ -161,45 +121,18 @@ class UserInterface
     end
   end
 
-  def select_route
-    Route.show_all_routes
+# Не публичный, используется только внутри интерфейса
+  def create_train
     loop do
-      puts @texts.select_route_for_editing
-      user_input = gets.chomp
-      if user_input =='stop'
-        break
-      elsif !user_input.nil?
-        return Route.routes[user_input.to_i]
-      else
-        puts @texts.wrong_input
-      end
-    end
-  end
-
-  def delete_station(route)
-    loop do
-      route.show_way_stations
-      user_input = gets.chomp
-      if user_input == 'stop'
-        break
-      elsif !user_input.to_i.nil?
-        route.delete_station(route.way_stations[user_input.to_i])
-      else
-        puts @texts.wrong_input
-      end 
-    end
-  end
-
-  def train_input
-    loop do
-      puts @texts.add_train
+      puts @texts.create_train_name
       train_name = gets.chomp
-      puts @texts.choose_train_type
-      train_type = gets.chomp.to_i
-      if train_type == 0
+      puts @texts.select_train_type
+      train_type = gets.chomp
+      case train_type
+      when '1'
         user_input_train_cars(CargoTrain.new(train_name))
         break
-      elsif train_type == 1
+      when '2'
         user_input_train_cars(PassengerTrain.new(train_name))
         break
       else
@@ -208,9 +141,9 @@ class UserInterface
     end
   end
 
+# Не публичный, используется только внутри интерфейса
   def user_input_train_cars(train)
     loop do
-      puts 'I am in add_train_cars_for_train'
       puts @texts.add_train_cars
       user_input = gets.chomp.to_i
       if user_input.nil?
@@ -222,19 +155,18 @@ class UserInterface
     end
   end
 
+# Не публичный, используется только внутри интерфейса
   def train_move
     loop do
       puts @texts.train_move_direction
       user_input = gets.chomp
       case user_input
       when '1'
-        puts ' train move selected 1'
-        train = select_train
+        train = @middleware.select_train
         train.route.nil? ? (puts @texts.train_no_route) : 
         (train.move_forward)
       when '2'
-        puts ' train move selected 1'
-        train = select_train
+        train = @middleware.select_train
         train.route.nil? ? (puts @texts.train_no_route) : 
         (train.move_backward)
       when 'stop'
@@ -245,32 +177,16 @@ class UserInterface
     end
   end
 
-
-
-  def select_train
-    loop do
-      Train.show_all_trains
-      puts @texts.select_train
-      user_input = gets.chomp
-      return nil if !Train.trains.any?
-      if user_input == 'stop'
-        break
-      elsif !user_input.to_i.nil?
-        return Train.trains[user_input.to_i]
-      else
-        puts @texts.wrong_input
-      end
-    end
-  end
-
+# Не публичный, используется только внутри интерфейса
   def train_add_route
-    train = select_train
-    route = select_route
+    train = @middleware.select_train
+    route = @middleware.select_route
     train.nil? || route.nil? ? (puts @texts.cannot_add_route) : (train.add_route(route))
   end
 
+# Не публичный, используется только внутри интерфейса
   def add_delete_train_car
-    train = select_train
+    train = @middleware.select_train
     loop do
       puts @texts.add_delete_train_car
       user_input = gets.chomp
@@ -285,6 +201,12 @@ class UserInterface
         puts @texts.wrong_input
       end
     end
+  end
+
+# Не публичный, используется только внутри интерфейса
+  def trains_on_station
+    station = @middleware.select_station
+    station.list_trains
   end
 
 end
