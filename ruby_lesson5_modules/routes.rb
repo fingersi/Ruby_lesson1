@@ -22,15 +22,6 @@ class Route
       puts Texts.no_routes
     end
   end
-=begin
-  def self.show_way_stations(route)
-    index = 0
-    route.way_stations.each do |station|
-      puts "index: #{index}, station name #{station.name}"
-      index += 1
-    end
-  end
-=end
 
   # Публичный, потому что использовается в интерфейсе пользователя
   def show_way_stations
@@ -46,7 +37,6 @@ class Route
     @@routes
   end
 
-  
   # Публичный,  использовается в интерфейсе пользователя.
   def add_station(station)
     @way_stations << station
@@ -77,11 +67,4 @@ class Route
   def delete_way_station(station)
     @way_stations.delete(station)
   end
-
-  # Публичный,  использовается в интерфейсе пользователя.
-=begin
-  def show
-    puts " from: #{@departure_station}, to: #{@arrival_station}"
-  end
-=end
 end

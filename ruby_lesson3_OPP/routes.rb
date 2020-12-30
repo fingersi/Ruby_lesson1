@@ -1,4 +1,6 @@
 class Route
+  attr_reader :departure_station
+  
   def initialize(departure_station, arrival_station)
     @departure_station = departure_station
     @arrival_station = arrival_station

@@ -77,7 +77,7 @@ class Train
   def next_station
     route_stations = @route.stations
     st_index = route_stations.index(@current_station)
-    st_index == route_stations.size ? (return nil) : (return @route.stations[st_index + 1])
+    st_index == route_stations.size ? (return nil) : ( @route.stations[st_index + 1] )
   end
 
   def show_next_station
@@ -96,7 +96,7 @@ class Train
   def prev_station
     route_stations = @route.stations
     st_index = route_stations.index(@current_station)
-    st_index == 0 ? (return nil) : (return route_stations[st_index - 1])  
+    st_index == 0 ? (return nil) : ( route_stations[st_index - 1] )  
   end
 
   def show_prev_station   
@@ -127,8 +127,10 @@ class Train
     #next_st = 0
     route_staions.each do |station| 
     if station == @current_station
-      index == 0 ? prev_st = nil : prev_st = route_staions[index - 1]
-      index == route_staions.size ? next_st = nil : next_st = route_staions[index + 1]
+      #index == 0 ? prev_st = nil : prev_st = route_staions[index - 1]
+      prev_st = route_staions[index - 1]
+      next_st = route_staions[index + 1]
+      #index == route_staions.size ? next_st = nil : next_st = route_staions[index + 1]
       return [prev_st, @current_station, next_st]
     end
       index += 1

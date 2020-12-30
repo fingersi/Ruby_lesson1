@@ -1,33 +1,43 @@
+
+require_relative 'manufacturer'
+
 class Train
   attr_accessor :number, :speed, :train_cars
+  
   @@trains = []
+
+  include Manufacturer
 
   attr_reader :type, :current_station, :type_id, :route
   def initialize(number)
-    @speed = 0 
+    @speed = 0
     @number = number
     @train_cars = []
     @@trains << self
   end
 
-  # Публичный метод, используется в интерфейсе
   def self.show_all_trains
     if @@trains.any?
       index = 0
       @@trains.each do |train| 
         puts "index: #{index}, train number: #{train.number}, type: #{
         train.class}, current station: #{
-        train.current_station}, route: #{train.route}"
+        train.current_station}, route: #{train.route},  manufacturer: #{train.manufacturer}"
         index += 1
       end
     else
-      puts Texts.no_trains
+      puts Texts.no_train
     end
   end
 
-  #
   def self.trains
     @@trains
+  end
+
+  def self.find(number)
+    train = @@trains.detect { |train| train.number == number }
+    train.nil? ? (return nil) : (puts "Train: #{train.number
+    } Station: #{train.current_station}")
   end
 
   def stop

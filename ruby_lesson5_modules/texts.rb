@@ -19,6 +19,8 @@ class Texts
     Move train enter 7
     Add/delete train cars enter 8
     Add route to train enter 9
+    Add manufacture for train enter 10
+    Find train by number enter 11
     for exit press 0
     '
   end
@@ -141,4 +143,35 @@ class Texts
      Before moving train, add any route to it
     '
   end
+
+  def add_manufacturer
+    '
+      Enter manufacture name
+    '
+  end
+
+  def self.no_train
+    '
+    There is no train, add one. 
+    '
+  end
+
+  def no_train
+    '
+    There is no train, add one.
+    '
+  end
+
+  def self.no_stations
+    '
+    There is no station, add one.
+    '
+  end
+
+  def train_find
+    '
+      Enter number of the train
+    '
+  end
+
 end

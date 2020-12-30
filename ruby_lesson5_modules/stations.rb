@@ -9,13 +9,15 @@ class Station
     @@stations << self
   end
 
-
-
   # Публичный, использовается в интерфейсе пользователя.
   def self.stations
     @@stations
   end
 
+  def self.all 
+    @@stations
+  end
+  
   # Публичный,  использовается в интерфейсе пользователя. Yt
   def self.find_by_name(station_name)
     @@stations.detect{ |station| station.name == station_name}
