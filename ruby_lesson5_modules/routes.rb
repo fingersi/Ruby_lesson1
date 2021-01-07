@@ -1,6 +1,13 @@
+require_relative 'instancecounter'
+
 class Route
   attr_reader :departure_station, :arrival_station
-  attr_accessor :way_stations 
+  attr_accessor :way_stations
+
+  extend InstanceCounter::ClassMethods
+  include InstanceCounter::InstanceMethods
+
+  self.class_init
 
   @@routes = []
   def initialize(departure_station, arrival_station)
@@ -8,6 +15,7 @@ class Route
     @arrival_station = arrival_station
     @way_stations = []
     @@routes << self
+    register_instance
   end
 
   # метод публичный, используется в интерфейсе

@@ -21,6 +21,7 @@ class Texts
     Add route to train enter 9
     Add manufacture for train enter 10
     Find train by number enter 11
+    Instance number of Stations/Routes/Trains enter 12
     for exit press 0
     '
   end
@@ -174,4 +175,24 @@ class Texts
     '
   end
 
+  def instances_number
+    '
+      Show number of stations, enter 1
+      Show number of routes, enter 2
+      Show number of trains, enter 3
+
+    '
+  end
+
+  def no_train_found
+    '
+      There is no train with this name
+    '
+  end
+
+  def manufacturer
+    '
+    Enter name of train car manufacturer
+    '
+  end
 end

@@ -1,5 +1,5 @@
-
 require_relative 'manufacturer'
+require_relative 'instancecounter'
 
 class Train
   attr_accessor :number, :speed, :train_cars
@@ -7,13 +7,19 @@ class Train
   @@trains = []
 
   include Manufacturer
+  extend InstanceCounter::ClassMethods
+  include InstanceCounter::InstanceMethods
+  
+  self.class_init
 
   attr_reader :type, :current_station, :type_id, :route
+ 
   def initialize(number)
     @speed = 0
     @number = number
     @train_cars = []
     @@trains << self
+    register_instance
   end
 
   def self.show_all_trains
@@ -35,9 +41,7 @@ class Train
   end
 
   def self.find(number)
-    train = @@trains.detect { |train| train.number == number }
-    train.nil? ? (return nil) : (puts "Train: #{train.number
-    } Station: #{train.current_station}")
+    @@trains.detect { |train| train.number == number }
   end
 
   def stop
@@ -162,11 +166,19 @@ class Train
     return station
   end
 
-  def add_train_cars(number)
+  def add_train_cars(number, manufacturer)
     if type == 'cargo'
-      number.times { self.train_cars << CargoTrainCar.new } 
+      number.times do
+        train_car = CargoTrainCar.new
+        train_car.manufacturer = manufacturer 
+        self.train_cars << train_car
+      end
     else
-      number.times { self.train_cars << PassengerTrainCar.new } 
+      number.times do
+        train_car = PassengerTrainCar.new
+        train_car.manufacturer = manufacturer
+        self.train_cars << train_car
+      end
     end
     puts "Train #{@number} has #{@train_cars.size} train cars"
   end

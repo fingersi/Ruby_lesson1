@@ -1,5 +1,13 @@
+require_relative  'instancecounter'
+
 class Station
   attr_reader :name
+
+
+  extend InstanceCounter::ClassMethods
+  include InstanceCounter::InstanceMethods
+
+  self.class_init
 
   @@stations = []
   
@@ -7,6 +15,7 @@ class Station
     @name = name
     @trains = []
     @@stations << self
+    register_instance
   end
 
   # Публичный, использовается в интерфейсе пользователя.

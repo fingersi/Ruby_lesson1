@@ -14,7 +14,7 @@ class UserInterface
       when '0'
         break
       when '1'
-        display_input
+      show_all_input
       when '2'
         create_station
       when '3'
@@ -35,16 +35,18 @@ class UserInterface
         train_add_manufacturer
       when '11'
         train_find
+      when '12'
+        instances_number
       else
         puts @texts.wrong_input
       end
     end
   end
 
- protected
+ private
 
  #Не публичный, запускается из 
-  def display_input
+  def show_all_input
     puts @texts.display_select
     user_input = gets.chomp.to_i
     case user_input.to_i
@@ -60,6 +62,11 @@ class UserInterface
     else
       @texts.wrong_input
     end
+  end
+
+  def instances_number
+    puts "cargoTrains: #{CargoTrain.instances}, passengerTrain: #{PassengerTrain.instances} "
+    puts "Stations: #{Station.instances}, Routes: #{Route.instances}"
   end
 
 #Не публичный, используется только внутри интерфейса
@@ -149,11 +156,14 @@ class UserInterface
   def user_input_train_cars(train)
     loop do
       puts @texts.add_train_cars
-      user_input = gets.chomp.to_i
-      if user_input.nil?
+      user_input_number = gets.chomp.to_i
+      puts 'I am here'
+      puts @texts.manufacturer
+      user_input_manufacturer = gets.chomp
+      if user_input_number.nil?
         puts @texts.wrong_input
       else
-        train.add_train_cars(user_input)
+        train.add_train_cars(user_input_number, user_input_manufacturer)
         break
       end
     end
@@ -196,7 +206,9 @@ class UserInterface
       user_input = gets.chomp
       case user_input
       when '1'
-        train.add_train_cars(1)
+        puts @texts.manufacturer
+        user_input_manufacturer = gets.chomp
+        train.add_train_cars(1, user_input_manufacturer)
       when '2'
         train.delete_train_cars(1)
       when 'stop'
@@ -234,10 +246,13 @@ class UserInterface
   def train_find
     puts @texts.train_find
     user_input = gets.chomp
-    if user_input.nil?
-      return
-    else
-      Train.find(user_input)
+    return if user_input.nil?
+    train = Train.find(user_input)
+    if train.nil?
+      puts @texts.no_train_found
+    else 
+      puts "Train: #{train.number} Station: #{train.current_station}"
     end
   end
+
 end
