@@ -7,8 +7,6 @@ class Station
   extend InstanceCounter::ClassMethods
   include InstanceCounter::InstanceMethods
 
-  self.class_init
-
   @@stations = []
   
   def initialize(name)

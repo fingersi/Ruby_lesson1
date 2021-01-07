@@ -7,8 +7,6 @@ class Route
   extend InstanceCounter::ClassMethods
   include InstanceCounter::InstanceMethods
 
-  self.class_init
-
   @@routes = []
   def initialize(departure_station, arrival_station)
     @departure_station = departure_station

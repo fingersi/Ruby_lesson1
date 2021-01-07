@@ -9,8 +9,6 @@ class Train
   include Manufacturer
   extend InstanceCounter::ClassMethods
   include InstanceCounter::InstanceMethods
-  
-  self.class_init
 
   attr_reader :type, :current_station, :type_id, :route
  
