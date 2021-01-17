@@ -31,9 +31,8 @@ class Route
 
   # метод публичный, используется в интерфейсе
   def self.show_all_routes
-    index = 0 
     if @@routes.any?
-      @@routes.each do |route| 
+      @@routes.each_with_index do |route, index| 
         puts "index: #{index} route from #{route.departure_station.name}, to #{route.arrival_station.name}"
         index += 1
       end
@@ -46,17 +45,10 @@ class Route
     index_valid!(index)
     true
   rescue StandardError => e
-    puts ''
-    puts "Exception Class: #{ e.class.name }"
-    puts "Exception Message: #{ e.message }"
-    puts "Exception Backtrace: #{ e.backtrace }"
-    puts ''
-    false
+    e
   end
 
   def self.index_valid!(index)
-    #@@routes.each{|route| puts "route: #{route}" }
-    puts "Station.stations: #{Station.stations[index]}"
     raise StandardError, "Wrong station index." if Station.stations[index].nil?
   end
 
@@ -80,12 +72,10 @@ class Route
     @way_stations << station
   end
 
-
-
   # Публичный,  использовается в интерфейсе пользователя.
-  def delete_station(station)
-    puts 'You cannot delete departure station' if station == @departure_station
-    puts 'You cannot delete arrival station' if station == @arrival_station
+  def delete_station(station) 
+    raise StandardError, 'You cannot delete departure station' if station == @departure_station
+    raise StandardError, 'You cannot delete arrival station' if station == @arrival_station
     @way_stations.delete(station) 
   end
 

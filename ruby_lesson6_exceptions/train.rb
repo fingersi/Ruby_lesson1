@@ -42,8 +42,7 @@ class Train
 
   def self.show_all_trains
     if @@trains.any?
-      index = 0
-      @@trains.each do |train| 
+      @@trains.each_with_index do |train, index| 
         puts "index: #{index}, train number: #{train.number}, type: #{
         train.class}, current station: #{
         train.current_station}, route: #{train.route},  manufacturer: #{train.manufacturer}"

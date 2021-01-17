@@ -41,9 +41,8 @@ class Station
 
    # Публичный,  использовается в интерфейсе пользователя.
   def self.show_all_stations
-    index = 0
     if @@stations.any?
-      @@stations.each do |station| 
+      @@stations.each_with_index do |station, index| 
         puts "Index: #{index}, Station name: #{station.name}"
         index += 1
       end
