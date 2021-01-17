@@ -1,4 +1,8 @@
+require_relative 'exceptionhadler'
+
 class UserInterface
+
+  include ExceptionHadler
 
   def initialize(texts)
     @texts = texts
@@ -20,23 +24,60 @@ class UserInterface
       when '3'
         create_route
       when '4'
-        create_train
+        begin
+          create_train
+        rescue StandardError => e
+          exeption_hadler(e)
+        end
+
       when '5'
-        route_edit
+        begin
+          route_edit
+        rescue StandardError => e
+          exeption_hadler(e)
+        end
       when '6'
-        trains_on_station
+        begin
+          trains_on_station
+        rescue StandardError => e
+          exeption_hadler(e)
+        end
       when '7'
-        train_move
+        begin
+          train_move
+        rescue StandardError => e
+          exeption_hadler(e)
+        end
       when '8'
-        add_delete_train_car
+        begin
+          add_delete_train_car
+        rescue StandardError => e
+          exeption_hadler(e)
+        end
       when '9'
-        train_add_route
+        begin
+          train_add_route
+        rescue StandardError => e
+          exeption_hadler(e)
+        end
       when '10'
-        train_add_manufacturer
+        begin
+          train_add_manufacturer
+        rescue StandardError => e
+          exeption_hadler(e)
+        end
       when '11'
-        train_find
+        begin
+          train_find
+        rescue StandardError => e
+          exeption_hadler(e)
+        end
       when '12'
-        instances_number
+        begin 
+          instances_number
+        rescue StandardError => e
+          exeption_hadler(e)
+        end
       else
         puts @texts.wrong_input
       end
@@ -62,11 +103,6 @@ class UserInterface
     else
       @texts.wrong_input
     end
-  end
-
-  def instances_number
-    puts "cargoTrains: #{CargoTrain.instances}, passengerTrain: #{PassengerTrain.instances} "
-    puts "Stations: #{Station.instances}, Routes: #{Route.instances}"
   end
 
 #Не публичный, используется только внутри интерфейса
@@ -137,7 +173,7 @@ class UserInterface
     loop do
       puts @texts.create_train_number
       train_number = gets.chomp
-      break unless Train.valid?(train_number)
+      Train.valid!(train_number)
       puts @texts.select_train_type
       train_type = gets.chomp
       case train_type
@@ -158,7 +194,7 @@ class UserInterface
     loop do
       puts @texts.add_train_cars
       user_input_number = gets.chomp
-      break unless Train.valid_train_cars?(user_input_number)
+      break unless Train.valid_train_cars!(user_input_number)
       puts @texts.manufacturer
       user_input_manufacturer = gets.chomp
       if user_input_number.nil?
@@ -256,6 +292,11 @@ class UserInterface
     else 
       puts "Train: #{train.number} Station: #{train.current_station}"
     end
+  end
+
+  def instances_number
+    puts "cargoTrains: #{CargoTrain.instances}, passengerTrain: #{PassengerTrain.instances} "
+    puts "Stations: #{Station.instances}, Routes: #{Route.instances}"
   end
 
 end

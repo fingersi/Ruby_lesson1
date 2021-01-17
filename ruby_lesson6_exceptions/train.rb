@@ -29,22 +29,14 @@ class Train
     valid!(number)
     true
   rescue StandardError => e
-    puts ''
-    puts e.inspect
-    puts ''
-    false
+    e
   end
 
   def self.valid_train_cars?(value)
     self.valid_train_cars!(value)
     true
   rescue StandardError => e
-    puts ''
-    puts "Exception Class: #{ e.class.name }"
-    puts "Exception Message: #{ e.message }"
-    puts "Exception Backtrace: #{ e.backtrace }"
-    puts ''
-    false
+    e
   end
 
 

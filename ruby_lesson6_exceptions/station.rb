@@ -11,7 +11,7 @@ class Station
   @@stations = []
   
   def initialize(name)
-    return nil until valid?(name)
+    return until valid?(name)
     @name = name
     @trains = []
     @@stations << self
@@ -22,9 +22,7 @@ class Station
     valid!(name)
     true
   rescue StandardError => e
-    puts e.inspect
-    puts ''
-    false
+    e
   end
 
   # Публичный, использовается в интерфейсе пользователя.

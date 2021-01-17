@@ -19,7 +19,7 @@ route1 = Route.new(st1, st2)
 route1.add_station(st3)
 route1.add_station(st4)
 route1.add_station(st5)
-tr1 = CargoTrain.new('123')
+tr1 = CargoTrain.new('12300')
 tr1.add_train_cars(11, 'УВЗ')
 
 texts = Texts.new

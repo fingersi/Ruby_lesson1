@@ -28,7 +28,7 @@ class MiddleWare
       Station.show_all_stations
       puts @texts.select_station
       user_input = gets.chomp
-      return nil if !Train.trains.any?
+      return if Train.trains.empty?
       if user_input == 'stop'
         break
       elsif !user_input.to_i.nil?

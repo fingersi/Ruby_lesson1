@@ -9,7 +9,8 @@ class Route
 
   @@routes = []
   def initialize(departure_station, arrival_station)
-    return nil until self.class.valid_station?(departure_station) || self.class.valid_station?(arrival_station)
+    self.class.valid_station!(arrival_station)
+    self.class.valid_station!(departure_station)
     @departure_station = departure_station
     @arrival_station = arrival_station
     @way_stations = []
@@ -21,16 +22,11 @@ class Route
     self.valid_station!(station)
     true
     rescue StandardError => e
-      puts ''
-      puts "Exception Class: #{ e.class.name }"
-      puts "Exception Message: #{ e.message }"
-      puts "Exception Backtrace: #{ e.backtrace }"
-      puts ''
-      false
+      e
   end
 
   def self.valid_station!(station)
-    raise StandardError, 'Wrong station' unless station.kind_of?(Station)
+    raise StandardError 'Objects is not a Station' unless station.kind_of?(Station)
   end
 
   # метод публичный, используется в интерфейсе
@@ -62,19 +58,6 @@ class Route
     #@@routes.each{|route| puts "route: #{route}" }
     puts "Station.stations: #{Station.stations[index]}"
     raise StandardError, "Wrong station index." if Station.stations[index].nil?
-  end
-
-  def self.station_valid?(station)
-    self.station.valid!(station)
-  rescue StandardError => e
-    puts ''
-    puts e.inspect
-    puts ''
-  end
-
-
-  def self.station_valid!(station)
-    raise StandardError 'Objects is not a Station' unless stations.kind_of(Stations)
   end
 
   # Публичный, потому что использовается в интерфейсе пользователя
