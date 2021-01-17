@@ -34,7 +34,6 @@ class Route
     if @@routes.any?
       @@routes.each_with_index do |route, index| 
         puts "index: #{index} route from #{route.departure_station.name}, to #{route.arrival_station.name}"
-        index += 1
       end
     else
       puts Texts.no_routes

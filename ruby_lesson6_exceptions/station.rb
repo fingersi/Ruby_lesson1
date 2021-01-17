@@ -44,7 +44,6 @@ class Station
     if @@stations.any?
       @@stations.each_with_index do |station, index| 
         puts "Index: #{index}, Station name: #{station.name}"
-        index += 1
       end
     else
       puts Texts.no_stations

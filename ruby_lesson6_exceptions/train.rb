@@ -46,7 +46,6 @@ class Train
         puts "index: #{index}, train number: #{train.number}, type: #{
         train.class}, current station: #{
         train.current_station}, route: #{train.route},  manufacturer: #{train.manufacturer}"
-        index += 1
       end
     else
       puts Texts.no_train
