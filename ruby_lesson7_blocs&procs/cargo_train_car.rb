@@ -2,23 +2,9 @@ class CargoTrainCar < TrainCar
 
   attr_reader :type
   
-  def initialize(volume, loaded = 0, number = rand(0..999999))
-    super(number)
+  def initialize(size, load = 0, number = rand(0..999999))
+    super(size, load, number)
     @type = 'Cargo'
-    @volume = volume
-    @cargo = loaded
-  end
-
-  def add_load(pay_load)
-    @cargo += pay_load
-  end
-
-  def load
-    @cargo
-  end
-
-  def free
-    @volume - @cargo
   end
 
   def valid_load?(loaded)
