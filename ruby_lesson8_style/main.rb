@@ -13,15 +13,18 @@ require_relative 'route_interface'
 require_relative 'station_interface'
 require_relative 'middleware'
 require_relative 'train_interface'
-require_relative 'user_input'
+require_relative 'user_input_train'
+require_relative 'user_input_route'
+require_relative 'user_input_station'
 
 class Main
-
   @texts = Texts.new
   @train_int = TrainInterface.new(@texts)
   @route_int = RouteInterface.new(@texts)
   @station_int = StationInterface.new(@texts)
-  @user_input = UserInput.new(@texts)
+  @user_input = UserInputTrain.new(@texts)
+  @user_input_route = UserInputRoute.new(@texts)
+  @user_input_station = UserInputStation.new(@texts)
 
   def self.texts
     @texts
@@ -43,6 +46,13 @@ class Main
     @user_input 
   end
 
+  def self.user_input_route
+    @user_input_route
+  end
+
+  def self.user_input_station
+    @user_input_station
+  end
 end
 
 st1 = Station.new('Москва')

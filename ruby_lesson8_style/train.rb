@@ -3,21 +3,20 @@ require_relative 'instancecounter'
 require_relative 'exceptionhadler'
 
 class Train
-
   extend Manufacturer::ClassMethods
   include Manufacturer::InstanceMethods
   include ExceptionHadler
   extend InstanceCounter::ClassMethods
   include InstanceCounter::InstanceMethods
 
-  TRAIN_NUMBER_FORMAT = /^[а-я0-9]{3}([( )|-])?[а-я0-9]{2}$/i
-  TRAIN_CARS_FORMAT = /^[0-9]{1,3}$/
-  
+  TRAIN_NUMBER_FORMAT = /^[а-я0-9]{3}([( )|-])?[а-я0-9]{2}$/i.freeze
+  TRAIN_CARS_FORMAT = /^[0-9]{1,3}$/.freeze
+
   @@trains = []
 
   attr_accessor :number, :speed, :train_cars
   attr_reader :type, :current_station, :type_id, :route
-  
+
   def initialize(number)
     @speed = 0
     @number = number
@@ -44,11 +43,8 @@ class Train
   def self.valid!(number)
     raise StandardError, 'Input something, bitch.' if number.nil?
     raise StandardError, 'Train number should be have al least 3 letters.' if number.size < 5
-
-    if (number !~ TRAIN_NUMBER_FORMAT)
-      raise StandardError, 
-      'Train number should have 3 russian letters or digits - and 2 letters or digits '
-    end
+    raise StandardError, 'Train number should have 3 russian letters or digits - and 2 letters or digits ' if
+     number !~ TRAIN_NUMBER_FORMAT
   end
 
   def self.valid_train_cars!(value)
@@ -75,22 +71,19 @@ class Train
   end
 
   def add_train_car(train_car)
-    if self.type == train_car.type && @speed == 0
-      @train_cars << train_car
-      puts "train_car #{train_car} "
-    else
-      raise StandardError, 'Cannot add train car. Wrong train car type or train has speed.'
-    end
+    raise StandardError, 'Cannot add train car. Wrong train car type or train has speed.' unless
+     @type == train_car.type && @speed.zero?
+
+    @train_cars << train_car
+    puts "train_car #{train_car} "
   end
 
   def delete_train_car
-    if @speed == 0
-      @train_cars_number -= 1 if @train_cars_number > 0
-      puts "Train car has been deleted. 
-      train_cars_number: #{@train_cars_number}"
-    else
-      raise StandardError, "Stop train before deleting train cars "
-    end
+    raise StandardError, 'Stop train before deleting train cars' unless @speed.zero?
+
+    @train_cars_number -= 1 if @train_cars_number.positive?
+    puts "Train car has been deleted.
+    train_cars_number: #{@train_cars_number}"
   end
 
   def add_route(route)
@@ -104,7 +97,7 @@ class Train
 
     route_stations = @route.stations
     st_index = route_stations.index(@current_station)
-    st_index == route_stations.size ? (return nil) : ( @route.stations[st_index + 1] )
+    st_index == route_stations.size ? (return nil) : @route.stations[st_index + 1]
   end
 
   def prev_station
@@ -112,25 +105,22 @@ class Train
 
     route_stations = @route.stations
     st_index = route_stations.index(@current_station)
-    st_index == 0 ? (return nil) : ( route_stations[st_index - 1] )  
+    st_index.zero ? (return nil) : (route_stations[st_index - 1])
   end
 
   def stations_on_route
     route_staions = @route.stations
     route_staions.each_with_index do |station, index|
-      if station == @current_station
-        prev_st = route_staions[index - 1]
-        next_st = route_staions[index + 1]
-        return [prev_st, @current_station, next_st]
-      end
+      prev_st = route_staions[index - 1]
+      next_st = route_staions[index + 1]
+      return [prev_st, @current_station, next_st] if station == @current_station
     end
   end
 
   def change_station(station)
-    @current_station.train_departure(self) unless @current_station.nil?
+    @current_station&.train_departure(self)
     station.train_arrive(self)
     @current_station = station
     station
   end
-
 end

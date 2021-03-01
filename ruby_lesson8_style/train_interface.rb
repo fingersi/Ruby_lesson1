@@ -3,23 +3,14 @@ require_relative 'text'
 class TrainInterface
   def initialize(texts)
     @texts = texts
-    @user_input = UserInput.new(@texts)
+    @user_input = UserInputTrain.new(@texts)
   end
 
   def select_train
-    loop do
-      show_all_trains
-      return nil if Train.trains.empty?
-      puts @texts.select_train
-      user_input = gets.chomp
-      if user_input == 'stop'
-        break
-      elsif !user_input.to_i.nil? && !Train.trains[user_input.to_i].nil?
-        return Train.trains[user_input.to_i]
-      else
-        puts @texts.wrong_input
-      end
-    end
+    show_all_train
+    raise StandertError, 'No trains, create any one.' if Train.trains.empty?
+
+    @user_input.select_train
   end
 
   def show_all_trains_with_cars
@@ -54,17 +45,18 @@ class TrainInterface
     end
   end
 
-  def show_prev_station
-    if @current_station.nil?
-      raise StandardError, 'Trains has no route.'
+  def show_prev_station(train)
+    raise StandardError, 'Trains has no route.' if train.current_station.nil?
+
+    if train.prev_station.nil? 
+      puts 'Train is on departure station on the route.'
     else
-     self.prev_station.nil? ? (puts 'Train is on departure station on the route.') : 
-     (puts "Train's previous station is #{@route[st_index - 1]}")
+      puts "Train's previous station is #{train.route[st_index - 1]}"
     end
   end
 
   def show_current_station
-    @current_staion.nil? ? (puts "Train is in nowhere =)") : (puts "Train's current station is: #{@current_station.name}")
+    @current_staion.nil? ? (puts 'Train is in nowhere =)') : (puts "Train's current station is: #{@current_station.name}")
   end
 
   def show_train_cars_number
@@ -77,10 +69,10 @@ class TrainInterface
     else
       next_station = train.next_station
       if next_station.nil?
-       puts 'Train is on last station on the route. Please add new route.'
-      else 
+        puts 'Train is on last station on the route. Please add new route.'
+      else
         puts "Train's next station is #{@route[st_index + 1]}"
-      end 
+      end
     end
   end
 

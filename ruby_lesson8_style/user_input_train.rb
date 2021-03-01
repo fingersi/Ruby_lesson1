@@ -1,6 +1,6 @@
 require_relative 'exceptionhadler'
 
-class UserInput
+class UserInputTrain
 
   include ExceptionHadler
 
@@ -109,6 +109,18 @@ class UserInput
       raise StandardError, 'User stops input' if user_input == 'stop'
 
       return Route.routes[user_input.to_i] unless Route.routes[user_input.to_i].nil?
+
+      puts @texts.wrong_input
+    end
+  end
+
+  def select_train
+    loop do
+      puts @texts.select_route_for_editing
+      user_input = gets.chomp
+      raise StandardError, 'User stops input' if user_input == 'stop'
+
+      return Train.trains[user_input.to_i] unless Train.trains[user_input.to_i].nil
 
       puts @texts.wrong_input
     end

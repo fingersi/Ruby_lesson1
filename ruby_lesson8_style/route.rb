@@ -4,6 +4,7 @@ class Route
   attr_reader :departure_station, :arrival_station
   attr_accessor :way_stations
 
+  include ExceptionHadler
   extend InstanceCounter::ClassMethods
   include InstanceCounter::InstanceMethods
 
@@ -20,21 +21,23 @@ class Route
   end
 
   def self.valid_station?(station)
-    self.valid_station!(station)
+    valid_station!(station)
     true
-    rescue StandardError => e
-      e
+  rescue StandardError => e
+    ExceptionHadler(e)
+    false
   end
 
   def self.index_valid?(index)
     index_valid!(index)
     true
   rescue StandardError => e
-    e
+    ExceptionHadler(e)
+    false
   end
 
   def self.index_valid!(index)
-    raise StandardError, "Wrong station index." if Station.stations[index].nil?
+    raise StandardError, 'Wrong station index.' if Station.stations[index].nil?
   end
 
   def self.routes
@@ -57,8 +60,10 @@ class Route
 
   def delete_station(station) 
     raise StandardError, 'You cannot delete departure station' if station == @departure_station
+
     raise StandardError, 'You cannot delete arrival station' if station == @arrival_station
-    @way_stations.delete(station) 
+
+    @way_stations.delete(station)
   end
 
   def stations
@@ -78,6 +83,4 @@ class Route
       puts 'No station to adding' 
     end
   end
-
-
 end

@@ -4,6 +4,7 @@ class StationInterface
 
   def initialize(texts)
     @texts = texts
+    @user_input_station = UserInputStation.new(@texts)
   end
 
   def  show_all_stations
@@ -31,19 +32,10 @@ class StationInterface
   end
 
   def select_station
-    loop do
-      Main.station_int.show_all_stations
-      puts @texts.select_station
-      user_input = gets.chomp
-      return if Train.trains.empty?
-      if user_input == 'stop'
-        break
-      elsif !user_input.to_i.nil?
-        return Station.stations[user_input.to_i]
-      else
-        puts @texts.wrong_input
-      end
-    end
+    raise StandartError, 'No train, add one.' if Train.trains.empty?
+
+    user_input = @user_input_station.station_select
+    return Station.stations[user_input.to_i] unless user_input.nil?
   end
 
   def show_station_trains(station)

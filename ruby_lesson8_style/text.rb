@@ -59,7 +59,7 @@ class Texts
   def add_way_stations
     '
       If you want add stations enter 1
-      if you not press 0
+      If you not press 0
     '
   end
 

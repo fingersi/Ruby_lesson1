@@ -1,7 +1,11 @@
+require_relative 'exceptionhadler'
+
 class RouteInterface
+  include ExceptionHadler
 
   def initialize(texts)
     @texts = texts
+    @user_input_route = UserInputRoute.new(@texts)
   end
 
   def show_all_routes
@@ -15,10 +19,8 @@ class RouteInterface
   end
 
   def show_way_stations(route)
-    index = 0
-    route.way_stations.each do |station|
+    route.way_stations.each_with_index do |station, index|
       puts "index: #{index}, station name #{station.name}"
-      index += 1
     end
   end
 
@@ -29,102 +31,68 @@ class RouteInterface
 
   def select_route
     show_all_routes
-    @user_input.create_route
+    Route.routes[@user_input_route.select_route]
   end
 
   def delete_station_route(route)
-    loop do
-      show_way_stations(route)
-      user_input = gets.chomp
-      if user_input == 'stop'
-        break
-      elsif !user_input.to_i.nil?
-        route.delete_station(route.way_stations[user_input.to_i])
-      else
-        puts @texts.wrong_input
-      end
-    end
+    show_way_stations(route)
+    @user_input_route.delete_station_route
   end
 
   def add_stations_route(route)
     loop do
       stations = available_to_adding(route)
       stations_show(stations)
-      puts @texts.select_station_for_route
-      user_input = gets.chomp
-      if user_input == 'stop'
-        break
-      elsif Route.valid_station!(Station.find_by_name(stations[user_input.to_i]))
-        break 
-      elsif !user_input.nil?
-        route.add_station(Station.find_by_name(stations[user_input.to_i]))
-      else
-        puts @texts.wrong_input
-      end
+      station_name = @user_input_route.add_stations_route(stations)
+      break if station_name.nil?
+
+      route.add_station(Station.find_by_name(station_name))
     end
   end
 
   def stations_show(hash)
-    if !hash.nil?
+    if !hash.empty?
       hash.each { |key, value| puts "key #{key} value #{value}"}
     else
-      puts 'No station to adding'
+      puts 'No stations to adding'
     end
   end
 
   def available_to_adding(route)
     route_stations = route.stations
     stations = {}
-    i = 0
+    index = 0
     Station.stations.each do |station|
-      unless route_stations.detect {|st| st.name == station.name }
-        stations[i] = station.name
-        i += 1
+      unless route_stations.detect { |st| st.name == station.name }
+        stations[index] = station.name
+        index += 1
       end
     end
     stations
   end
 
   def user_input_way_stations(route)
-    loop do
-      puts @texts.add_way_stations
-      user_answer = gets.chomp.to_i
-      case user_answer
-      when 0
-        break
-      when 1
-        add_stations_route(route)
-        break
-      else
-        puts @texts.wrong_input
-      end
+    user_answer = @user_input_route.select_action(@texts.add_way_stations)
+    case user_answer
+    when '1'
+      add_stations_route(route)
     end
   end
 
   def route_edit
-    loop do
-      puts @texts.route_edit
-      user_input = gets.chomp.to_i
-      case user_input
-      when  0
-        break
-      when  1
-        add_stations_route(select_route)
-        break
-      when  2
-        delete_station_route(select_route)
-        break
-      else
-        puts @texts.wrong_input
-      end
+    user_answer = @user_input_route.select_action(@texts.route_edit)
+    case user_answer
+    when  '1'
+      add_stations_route(select_route)
+    when  '2'
+      delete_station_route(select_route)
     end
   end
 
-  def show_stations
-    self.stations.each_with_index do |station, index|
+  def show_stations(route)
+    route.stations.each_with_index do |station, index|
       puts "index #{index}, Station name #{station.name} "
       puts station.name
     end
   end
-
 end

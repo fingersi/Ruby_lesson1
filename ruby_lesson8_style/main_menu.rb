@@ -1,7 +1,6 @@
 require_relative 'exceptionhadler'
 
 class MainMenu
-
   include ExceptionHadler
 
   def initialize
@@ -10,9 +9,8 @@ class MainMenu
     @route_int = RouteInterface.new(@texts)
     @station_int = StationInterface.new(@texts)
     @middleware = MiddleWare.new(@texts)
-    @user_input = UserInput.new(@texts)
+    @user_input = UserInputTrain.new(@texts)
     @user_interface = UserInterface.new(@texts, @station_int, @route_int, @train_int, @user_input)
-
   end
 
   def action_select

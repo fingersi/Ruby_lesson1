@@ -1,15 +1,15 @@
-require_relative  'instancecounter'
+require_relative 'instancecounter'
 
 class Station
   attr_reader :name, :trains
 
-  STATION_NAME_FORMAT = /^[а-я0-9]*([( )|-])?[а-я0-9]*$/i
+  STATION_NAME_FORMAT = /^[а-я0-9]*([( )|-])?[а-я0-9]*$/i.freeze
 
   extend InstanceCounter::ClassMethods
   include InstanceCounter::InstanceMethods
 
   @@stations = []
-  
+
   def initialize(name)
     valid!(name)
     @name = name
@@ -68,6 +68,3 @@ class Station
     raise StandardError 'Objects is not a Train' unless train.kind_of?(Train)
   end
 end
-
-
-
