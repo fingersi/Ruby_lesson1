@@ -1,8 +1,3 @@
-# frozen_string_literal: true
-
-require_relative 'manufacturer'
-require_relative 'exceptionhadler'
-
 class TrainCar
   extend Manufacturer::ClassMethods
   include Manufacturer::InstanceMethods

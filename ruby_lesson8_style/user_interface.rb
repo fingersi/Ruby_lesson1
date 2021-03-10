@@ -61,7 +61,8 @@ class UserInterface < Main
   end
 
   def trains_on_station
-    @station_int.show_station_trains(@station_int.select_station)
+    station = @station_int.select_station
+    @station_int.show_station_trains(station)
   end
 
   def train_add_manufacturer

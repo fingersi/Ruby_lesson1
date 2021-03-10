@@ -113,5 +113,4 @@ class Texts2
       enter how much load you wand to add
     '
   end
-
 end

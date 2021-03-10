@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Main Class in TrainSim app
 class Main
   attr_reader :texts
@@ -13,7 +11,6 @@ class Main
     @route_int = RouteInterface.new(self, @texts)
     @station_int = StationInterface.new(self, @texts)
     @train_car_int = TrainCarInterface.new(self, @texts)
-    puts "@train_car_int #{@train_car_int}"
     @user_input = UserInput.new(self, @texts)
     @user_input_train = UserInputTrain.new(self, @texts)
     @user_input_route = UserInputRoute.new(self, @texts)

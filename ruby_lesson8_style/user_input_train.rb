@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # All user input for Trains class.
 class UserInputTrain < UserInput
   include ExceptionHadler

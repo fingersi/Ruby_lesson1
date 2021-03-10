@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # All  methodes to Station class
 class StationInterface
   def initialize(main, texts)
@@ -35,12 +33,16 @@ class StationInterface
     raise StandardError, 'No train, add one.' if Train.trains.empty?
 
     user_input = @main.user_input_station.station_select
-    return Station.stations[user_input.to_i] unless user_input.nil?
+    return Station.stations[user_input] unless user_input.nil?
   end
 
   def show_station_trains(station)
-    station.trains.each do |train|
-      puts "Train number: #{train.number} Train type: #{train.type} Cargo Trains: #{train.train_cars.size}"
+    if station.trains.empty?
+      puts @texts.no_train_in_station
+    else
+      station.trains.each do |train|
+        puts "Train number: #{train.number} Train type: #{train.type} Cargo Trains: #{train.train_cars.size}"
+      end
     end
   end
 end

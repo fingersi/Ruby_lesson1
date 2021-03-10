@@ -1,12 +1,10 @@
-# frozen_string_literal: true
-
 module ExceptionHadler
-  def exeption_hadler(e)
+  def exeption_hadler(error)
     puts ''
     puts 'ExceptionHadler'
-    puts "Exception Class: #{e.class.name}"
-    puts "Exception Message: #{e.message}"
-    puts "Exception Backtrace: #{e.backtrace}"
+    puts "Exception Class: #{error.class.name}"
+    puts "Exception Message: #{error.message}"
+    puts "Exception Backtrace: #{error.backtrace}"
     puts ''
   end
 end

@@ -14,7 +14,7 @@ class UserInputStation < UserInput
       puts @texts.select_station
       user_input = gets.chomp
       return if user_input == 'stop'
-      return Station.stations[user_input.to_i] unless user_input.to_i.nil?
+      return user_input.to_i unless user_input.to_i.nil?
 
       puts @texts.wrong_input
     end

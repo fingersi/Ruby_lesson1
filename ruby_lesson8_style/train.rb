@@ -112,7 +112,7 @@ class Train
 
     route_stations = @route.stations
     st_index = route_stations.index(@current_station)
-    st_index.zero ? (return nil) : (route_stations[st_index - 1])
+    st_index.zero? ? (return nil) : (route_stations[st_index - 1])
   end
 
   def change_station(station)

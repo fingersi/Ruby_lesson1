@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 # Class for basic user inputs.
 class UserInput
   attr_accessor :station_int, :route_int, :train_int
@@ -28,7 +26,7 @@ class UserInput
       return user_input if %w[1 2].include?(user_input)
 
       puts @texts.wrong_input
-    end 
+    end
   end
 
   def bloct_it_input

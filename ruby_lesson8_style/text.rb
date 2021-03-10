@@ -106,4 +106,8 @@ class Texts < Texts2
   def first_station
     'Train is on departure station on the route.'
   end
+
+  def no_train_in_station
+    'There is no train in station.'
+  end
 end

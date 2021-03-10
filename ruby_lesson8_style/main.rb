@@ -1,6 +1,5 @@
-# frozen_string_literal: true
-
 require_relative 'exceptionhadler'
+require_relative 'manufacturer'
 require_relative 'text2'
 require_relative 'text'
 require_relative 'train'

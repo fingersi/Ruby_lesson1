@@ -8,9 +8,9 @@ class MainMenu < UserInterface
 
   MAINMENU = { '1' => { 'action' => 'show_all_input', 'text' => 'stations/routes/trains enter' },
                '2' => { 'group' => 'station_int', 'method' => 'create_station', 'text' => 'Create station' },
-               '3' => { 'action' => 'create_route', 'text' => 'Create route'},
+               '3' => { 'action' => 'create_route', 'text' => 'Create route' },
                '4' => { 'action' => 'create_train', 'text' => 'Create train' },
-               '5' => { 'group' => 'route_int', 'method' => 'route_edit', 'text' => 'Change/add station to Route'},
+               '5' => { 'group' => 'route_int', 'method' => 'route_edit', 'text' => 'Change/add station to Route' },
                '6' => { 'action' => 'trains_on_station', 'text' => 'List trains in station' },
                '7' => { 'action' => 'train_direction_select', 'text' => 'Move train' },
                '8' => { 'action' => 'add_delete_train_car', 'text' => 'Add/delete train cars' },
