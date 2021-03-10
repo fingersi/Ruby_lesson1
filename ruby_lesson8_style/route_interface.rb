@@ -1,16 +1,17 @@
-require_relative 'exceptionhadler'
+# frozen_string_literal: true
 
+# All methods for route class
 class RouteInterface
   include ExceptionHadler
 
-  def initialize(texts)
+  def initialize(main, texts)
     @texts = texts
-    @user_input_route = UserInputRoute.new(@texts)
+    @main = main
   end
 
   def show_all_routes
     if Route.routes.any?
-      Route.routes.each_with_index do |route, index| 
+      Route.routes.each_with_index do |route, index|
         puts "index: #{index} route from #{route.departure_station.name}, to #{route.arrival_station.name}"
       end
     else
@@ -31,19 +32,19 @@ class RouteInterface
 
   def select_route
     show_all_routes
-    Route.routes[@user_input_route.select_route]
+    Route.routes[@main.user_input_route.select_route]
   end
 
   def delete_station_route(route)
     show_way_stations(route)
-    @user_input_route.delete_station_route
+    @main.user_input_route.delete_station_route(route)
   end
 
   def add_stations_route(route)
     loop do
       stations = available_to_adding(route)
       stations_show(stations)
-      station_name = @user_input_route.add_stations_route(stations)
+      station_name = @main.user_input_route.add_stations_route(stations)
       break if station_name.nil?
 
       route.add_station(Station.find_by_name(station_name))
@@ -52,7 +53,7 @@ class RouteInterface
 
   def stations_show(hash)
     if !hash.empty?
-      hash.each { |key, value| puts "key #{key} value #{value}"}
+      hash.each { |key, value| puts "key #{key} value #{value}" }
     else
       puts 'No stations to adding'
     end
@@ -72,7 +73,7 @@ class RouteInterface
   end
 
   def user_input_way_stations(route)
-    user_answer = @user_input_route.select_action(@texts.add_way_stations)
+    user_answer = @main.user_input_route.select_action(@texts.add_way_stations)
     case user_answer
     when '1'
       add_stations_route(route)
@@ -80,7 +81,7 @@ class RouteInterface
   end
 
   def route_edit
-    user_answer = @user_input_route.select_action(@texts.route_edit)
+    user_answer = @main.user_input_route.select_action(@texts.route_edit)
     case user_answer
     when  '1'
       add_stations_route(select_route)

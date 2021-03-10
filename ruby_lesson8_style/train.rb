@@ -1,6 +1,7 @@
+# frozen_string_literal: true
+
 require_relative 'manufacturer'
 require_relative 'instancecounter'
-require_relative 'exceptionhadler'
 
 class Train
   extend Manufacturer::ClassMethods
@@ -12,32 +13,42 @@ class Train
   TRAIN_NUMBER_FORMAT = /^[а-я0-9]{3}([( )|-])?[а-я0-9]{2}$/i.freeze
   TRAIN_CARS_FORMAT = /^[0-9]{1,3}$/.freeze
 
-  @@trains = []
-
   attr_accessor :number, :speed, :train_cars
   attr_reader :type, :current_station, :type_id, :route
+
+  @@trains = []
 
   def initialize(number)
     @speed = 0
     @number = number
     @train_cars = []
-    @@trains << self
+    self.class.add_train(self)
     register_instance
     self.class.valid?(number)
+  end
+
+  def self.add_train(train)
+    @@trains << train
+  end
+
+  def self.trains
+    @@trains
   end
 
   def self.valid?(number)
     valid!(number)
     true
   rescue StandardError => e
-    e
+    exeption_hadler(e)
+    false
   end
 
   def self.valid_train_cars?(value)
     valid_train_cars!(value)
     true
   rescue StandardError => e
-    e
+    exeption_hadler(e)
+    false
   end
 
   def self.valid!(number)
@@ -52,10 +63,6 @@ class Train
     raise StandardError, 'Input something, bitch' if value.nil?
     raise StandardError, 'Number of train cars should greater that 1 and less 100' if int_value < 1 || int_value > 100
     raise StandardError, 'You can enter all digits' if value !~ TRAIN_CARS_FORMAT
-  end
-
-  def self.trains
-    @@trains
   end
 
   def self.find(number)
@@ -81,9 +88,9 @@ class Train
   def delete_train_car
     raise StandardError, 'Stop train before deleting train cars' unless @speed.zero?
 
-    @train_cars_number -= 1 if @train_cars_number.positive?
+    @train_cars.slice(-1, 1) if @train_cars.size.positive?
     puts "Train car has been deleted.
-    train_cars_number: #{@train_cars_number}"
+    train_cars_number: #{@train_cars.size}"
   end
 
   def add_route(route)
@@ -106,15 +113,6 @@ class Train
     route_stations = @route.stations
     st_index = route_stations.index(@current_station)
     st_index.zero ? (return nil) : (route_stations[st_index - 1])
-  end
-
-  def stations_on_route
-    route_staions = @route.stations
-    route_staions.each_with_index do |station, index|
-      prev_st = route_staions[index - 1]
-      next_st = route_staions[index + 1]
-      return [prev_st, @current_station, next_st] if station == @current_station
-    end
   end
 
   def change_station(station)

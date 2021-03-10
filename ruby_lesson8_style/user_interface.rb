@@ -1,25 +1,16 @@
-require_relative 'exceptionhadler'
-
-class UserInterface
-
+# User Interface methodes
+class UserInterface < Main
   include ExceptionHadler
 
-  def initialize(texts, station_int, route_int, train_int, user_input)
-    @texts = texts
-    @train_int = train_int
-    @route_int = route_int
-    @station_int = station_int
-    @middleware = MiddleWare.new(texts)
-    @user_input = user_input
-  end
-
   def create_train
-    train_number = @user_input.enter_train_number
-    train_type = @user_input.select_action(@texts.select_train_type)
+    train_number = @user_input_train.enter_train_number
+    train_type = @user_input_train.select_action(@texts.select_train_type)
 
     case train_type
     when '1'
-      @train_int.create_train_cars_for_train(CargoTrain.new(train_number))
+      puts 'before train creation'
+      tr = CargoTrain.new(train_number)
+      @train_int.create_train_cars_for_train(tr)
     when '2'
       @train_int.create_train_cars_for_train(PassengerTrain.new(train_number))
     end
@@ -28,7 +19,7 @@ class UserInterface
   def show_all_input
     case @user_input.show_all_input
     when '1'
-      @station_ClassNameint.show_all_stations
+      @station_int.show_all_stations
     when '2'
       @route_int.show_all_routes
     when '3'
@@ -56,7 +47,7 @@ class UserInterface
   def train_add_route
     train = @train_int.select_train
     route = @route_int.select_route
-    train.nil? || route.nil? ? (puts @texts.cannot_add_route) : (train.add_route(route))
+    train.nil? || route.nil? ? (puts @texts.cannot_add_route) : train.add_route(route)
   end
 
   def add_delete_train_car
@@ -75,19 +66,11 @@ class UserInterface
 
   def train_add_manufacturer
     train = @train_int.select_train
-    if train.nil?
-      puts @texts.no_train
-      return nil
-    end
-    train.manufacturer = @user_input.enter_manufacturer
+    train.manufacturer = @user_input_train.enter_manufacturer
   end
 
   def train_find
-    puts @texts.train_find
-    user_input = gets.chomp
-    return if user_input.nil?
-
-    train = Train.find(user_input)
+    train = Train.find(@user_input_train.find_train)
     if train.nil?
       puts @texts.no_train_found
     else
@@ -101,22 +84,12 @@ class UserInterface
   end
 
   def block_it
-    loop do 
-      case bloct_it_input
-      when '1'
-        @middleware.block_it(@station_int.select_station)
-      when '2'
-        @middleware.block_it(@train_int.select_train)
-      when 'stop'
-        break
-      end
+    case @user_input.select_action(@texts.choise_block_it)
+    when '1'
+      @middleware.block_it(@station_int.select_station)
+    when '2'
+      @middleware.block_it(@train_int.select_train)
     end
-  end
-
-  def bloct_it_input
-    puts @texts.choise_block_it
-    user_input = gets.chomp.to_i
-    raise StationError, 'Wrong input' if user_input != 1 || user_input != 2
   end
 
   def show_train
@@ -127,27 +100,14 @@ class UserInterface
     train = @train_int.select_train
     @train_int.show_train_cars(train)
     train_car = @train_int.select_train_car(train)
-    loop do
-      puts @texts.add_load
-      user_input_load = gets.chomp
-      break if train_car.valid_load!(user_input_load)
-    end
-    add_load(user_input_load.to_i, train_car)
-  end
-
-  def add_load(load, train_car)
-    if train.train_cars[load].type == 'Cargo'
-      train_car.add_load(load)
-    else
-      load.times { train.train_cars[load].add_load }
-    end
+    @train_car_int.add_load(@user_input_train.add_load, train_car)
   end
 
   def create_route
     Route.enough_stations
     puts @texts.add_route
-    depature_station = @user_input.select_departure_station
-    arrival_station = @user_input.select_arrival_station(depature_station)
+    depature_station = @user_input_route.select_departure_station
+    arrival_station = @user_input_route.select_arrival_station(depature_station)
     @route_int.create_route(depature_station, arrival_station)
   end
 end

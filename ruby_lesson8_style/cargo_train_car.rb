@@ -1,8 +1,9 @@
-class CargoTrainCar < TrainCar
+# frozen_string_literal: true
 
+class CargoTrainCar < TrainCar
   attr_reader :type
-  
-  def initialize(size, load = 0, number = rand(0..999999))
+
+  def initialize(size, load = 0, number = rand(0..999_999))
     super(size, load, number)
     @type = 'Cargo'
   end
@@ -10,8 +11,8 @@ class CargoTrainCar < TrainCar
   def valid_load?(loaded)
     valid_load!(loaded)
     true
-    rescue StandardError => e
-      e
+  rescue StandardError => e
+    e
   end
 
   protected

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'manufacturer'
 require_relative 'exceptionhadler'
 
@@ -7,7 +9,7 @@ class TrainCar
   extend ExceptionHadler
   attr_reader :number, :load
 
-  SIZE_LOAD_FORMAT = /^[0-9]{1,7}$/ 
+  SIZE_LOAD_FORMAT = /^[0-9]{1,7}$/.freeze
 
   def initialize(size, load, number = rand(1..1_000_000), manufacturer = '')
     @number = number
@@ -41,7 +43,10 @@ class TrainCar
   end
 
   def self.valid!(size, load)
-    raise StandardError, 'Size and Load should have 1 - 7 figures' if size !~ SIZE_LOAD_FORMAT || load !~ SIZE_LOAD_FORMAT
+    if size !~ SIZE_LOAD_FORMAT || load !~ SIZE_LOAD_FORMAT
+      raise StandardError,
+            'Size and Load should have 1 - 7 figures'
+    end
     raise StandardError, 'Load is bigger that size' if size.to_i < load.to_i
   end
 

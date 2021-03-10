@@ -1,5 +1,6 @@
-class MiddleWare
+# frozen_string_literal: true
 
+class MiddleWare
   def initialize(texts)
     @texts = texts
   end

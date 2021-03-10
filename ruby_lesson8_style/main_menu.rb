@@ -1,112 +1,37 @@
-require_relative 'exceptionhadler'
-
-class MainMenu
+class MainMenu < UserInterface
   include ExceptionHadler
 
   def initialize
-    @texts = Texts.new
-    @train_int = TrainInterface.new(@texts)
-    @route_int = RouteInterface.new(@texts)
-    @station_int = StationInterface.new(@texts)
-    @middleware = MiddleWare.new(@texts)
-    @user_input = UserInputTrain.new(@texts)
-    @user_interface = UserInterface.new(@texts, @station_int, @route_int, @train_int, @user_input)
+    super
+    action_select
   end
 
+  MAINMENU = { '1' => { 'action' => 'show_all_input', 'text' => 'stations/routes/trains enter' },
+               '2' => { 'group' => 'station_int', 'method' => 'create_station', 'text' => 'Create station' },
+               '3' => { 'action' => 'create_route', 'text' => 'Create route'},
+               '4' => { 'action' => 'create_train', 'text' => 'Create train' },
+               '5' => { 'group' => 'route_int', 'method' => 'route_edit', 'text' => 'Change/add station to Route'},
+               '6' => { 'action' => 'trains_on_station', 'text' => 'List trains in station' },
+               '7' => { 'action' => 'train_direction_select', 'text' => 'Move train' },
+               '8' => { 'action' => 'add_delete_train_car', 'text' => 'Add/delete train cars' },
+               '9' => { 'action' => 'train_add_route', 'text' => 'Add route to train' },
+               '10' => { 'action' => 'train_add_manufacturer', 'text' => 'Add train manufacture' },
+               '11' => { 'action' => 'train_find', 'text' => 'Find train by number' },
+               '12' => { 'action' => 'instances_number', 'text' => 'Instance number of Stations/Routes/Trains' },
+               '13' => { 'action' => 'block_it', 'text' => 'Apple block to all Stations/Trains' },
+               '14' => { 'action' => 'show_train', 'text' => 'Show Train cars' },
+               '15' => { 'action' => 'add_delete_train_car', 'text' => 'Add load for train cars enter' } }.freeze
+
   def action_select
+    intro
     loop do
-      puts @texts.select_action
-      input = gets.chomp
-      case input
-      when '0'
-        break
-      when '1'
+      show_menu
+      user_input = gets.chomp
+      break if user_input == '0'
+
+      if !MAINMENU.select { |key| key == user_input }.empty?
         begin
-          @user_interface.show_all_input
-        rescue StandardError => e
-          exeption_hadler(e)
-        end
-      when '2'
-        begin
-          @station_int.create_station
-        rescue StandardError => e
-          exeption_hadler(e)
-        end
-      when '3'
-        begin
-          @user_interface.create_route
-        rescue StandardError => e
-          exeption_hadler(e)
-        end
-      when '4'
-        begin
-          @user_interface.create_train
-        rescue StandardError => e
-          exeption_hadler(e)
-        end
-      when '5'
-        begin
-          @route_int.route_edit
-        rescue StandardError => e
-          exeption_hadler(e)
-        end
-      when '6'
-        begin
-          @user_interface.trains_on_station
-        rescue StandardError => e
-          exeption_hadler(e)
-        end
-      when '7'
-        begin
-          @user_interface.train_direction_select
-        rescue StandardError => e
-          exeption_hadler(e)
-        end
-      when '8'
-        begin
-          @user_interface.add_delete_train_car
-        rescue StandardError => e
-          exeption_hadler(e)
-        end
-      when '9'
-        begin
-          @user_interface.train_add_route
-        rescue StandardError => e
-          exeption_hadler(e)
-        end
-      when '10'
-        begin
-          @user_interface.train_add_manufacturer
-        rescue StandardError => e
-          exeption_hadler(e)
-        end
-      when '11'
-        begin
-          @user_interface.train_find
-        rescue StandardError => e
-          exeption_hadler(e)
-        end
-      when '12'
-        begin
-          @user_interface.instances_number
-        rescue StandardError => e
-          exeption_hadler(e)
-        end
-      when '13'
-        begin
-          @user_interface.block_it
-        rescue StandardError => e
-          exeption_hadler(e)
-        end
-      when '14'
-        begin
-          @user_interface.show_train
-        rescue StandardError => e
-          exeption_hadler(e)
-        end
-      when '15'
-        begin
-          @user_interface.add_load_input
+          run_action(MAINMENU[user_input])
         rescue StandardError => e
           exeption_hadler(e)
         end
@@ -114,5 +39,28 @@ class MainMenu
         puts @texts.wrong_input
       end
     end
+  end
+
+  def show_menu
+    puts ''
+    MAINMENU.each { |key, value| puts "  For #{value['text']} enter - #{key}" }
+    puts '  For EXIT enter - 0'
+    puts ''
+  end
+
+  def run_action(hash)
+    if hash['method'].nil?
+      send(hash['action'])
+    elsif !hash['action'].nil?
+      send(hash['action']).send(hash['method'])
+    else
+      send(hash['group']).send(hash['method'])
+    end
+  end
+
+  def intro
+    puts ''
+    puts @texts.welcome_text
+    puts ''
   end
 end

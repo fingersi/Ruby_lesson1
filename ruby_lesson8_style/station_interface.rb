@@ -1,15 +1,15 @@
-require_relative 'text'
+# frozen_string_literal: true
 
+# All  methodes to Station class
 class StationInterface
-
-  def initialize(texts)
+  def initialize(main, texts)
     @texts = texts
-    @user_input_station = UserInputStation.new(@texts)
+    @main = main
   end
 
   def  show_all_stations
     if Station.stations.any?
-      Station.stations.each_with_index do |station, index| 
+      Station.stations.each_with_index do |station, index|
         puts "Index: #{index}, Station name: #{station.name}"
         show_station_trains(station)
       end
@@ -32,14 +32,14 @@ class StationInterface
   end
 
   def select_station
-    raise StandartError, 'No train, add one.' if Train.trains.empty?
+    raise StandardError, 'No train, add one.' if Train.trains.empty?
 
-    user_input = @user_input_station.station_select
+    user_input = @main.user_input_station.station_select
     return Station.stations[user_input.to_i] unless user_input.nil?
   end
 
   def show_station_trains(station)
-    station.trains.each do |train| 
+    station.trains.each do |train|
       puts "Train number: #{train.number} Train type: #{train.type} Cargo Trains: #{train.train_cars.size}"
     end
   end

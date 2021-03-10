@@ -1,7 +1,6 @@
 module InstanceCounter
-
+  # Inteance counter
   module ClassMethods
-
     def instances
       @instances ||= 0
       @instances
@@ -13,10 +12,10 @@ module InstanceCounter
     end
   end
 
+  # Instance add methods
   module InstanceMethods
-
     private
-    
+
     def register_instance
       self.class.add_instance
     end

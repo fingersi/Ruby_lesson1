@@ -1,11 +1,11 @@
-require_relative 'exceptionhadler'
+# frozen_string_literal: true
 
-class UserInputTrain
-
+# All user input for Trains class.
+class UserInputTrain < UserInput
   include ExceptionHadler
 
-  def initialize(texts)
-    @texts = texts
+  def initialize(main, texts = Texts.new)
+    super(main, texts)
   end
 
   def user_input_train_cars
@@ -59,70 +59,31 @@ class UserInputTrain
     end
   end
 
-  def show_all_input
-    loop do
-      puts @texts.display_select
-      user_input = gets.chomp
-      return if user_input == 'stop'
-      return user_input if %w[1 2 3].include?(user_input)
-
-      puts @texts.wrong_input
-    end
-  end
-
-  def select_action(text)
-    puts text
-    user_input = gets.chomp
-    return if user_input == 'stop'
-    return user_input if %w[1 2].include?(user_input)
-
-    puts @texts.wrong_input
-  end
-
-  def select_departure_station
-    loop do
-      Main.station_int.show_all_stations
-      puts @texts.choose_departure_station
-      departure_station_index = gets.chomp.to_i
-      return departure_station_index if Route.index_valid?(departure_station_index)
-
-      puts @texts.wrong_input
-    end
-  end
-
-  def select_arrival_station(departure_station_index)
-    loop do
-      puts @texts.choose_arrival_station
-      arrival_station_index = gets.chomp.to_i
-      if Route.index_valid?(arrival_station_index) && departure_station_index != arrival_station_index
-        return arrival_station_index 
-      end
-
-      puts @texts.wrong_input
-    end
-  end
-
-  def select_route
-    loop do
-      puts @texts.select_route_for_editing
-      user_input = gets.chomp
-      raise StandardError, 'User stops input' if user_input == 'stop'
-
-      return Route.routes[user_input.to_i] unless Route.routes[user_input.to_i].nil?
-
-      puts @texts.wrong_input
-    end
-  end
-
   def select_train
     loop do
       puts @texts.select_route_for_editing
       user_input = gets.chomp
       raise StandardError, 'User stops input' if user_input == 'stop'
 
-      return Train.trains[user_input.to_i] unless Train.trains[user_input.to_i].nil
+      return Train.trains[user_input.to_i] unless Train.trains[user_input.to_i].nil?
 
       puts @texts.wrong_input
+    end
+  end
+
+  def find_train
+    loop do
+      puts @texts.train_find
+      user_input = gets.chomp
+      return user_input unless user_input.nil?
+    end
+  end
+
+  def add_load
+    loop do
+      puts @texts.add_load
+      user_input_load = gets.chomp
+      return user_input_load if train_car.valid_load?(user_input_load)
     end
   end
 end

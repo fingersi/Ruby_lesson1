@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'instancecounter'
 
 class Station
@@ -60,11 +62,11 @@ class Station
 
   def valid!(name)
     raise StandardError, 'Input something, bitch.' if name.nil?
-    raise StandardError, 'Station name should be have al least 3 letters.'if name.size < 3
+    raise StandardError, 'Station name should be have al least 3 letters.' if name.size < 3
     raise StandardError, 'Station name should be more than 3 or russian charters' if name !~ STATION_NAME_FORMAT
   end
 
   def valid_train!(train)
-    raise StandardError 'Objects is not a Train' unless train.kind_of?(Train)
+    raise StandardError 'Objects is not a Train' unless train.is_a?(Train)
   end
 end

@@ -1,15 +1,16 @@
-require_relative 'exceptionhadler'
+# frozen_string_literal: true
 
-class UserInputStation
+# All user inputs for Station class
+class UserInputStation < UserInput
   include ExceptionHadler
 
-  def initialize(texts)
-    @texts = texts
+  def initialize(main, texts = Texts.new)
+    super(main, texts)
   end
 
   def station_select
     loop do
-      Main.station_int.show_all_stations
+      @main.station_int.show_all_stations
       puts @texts.select_station
       user_input = gets.chomp
       return if user_input == 'stop'

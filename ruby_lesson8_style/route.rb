@@ -1,5 +1,6 @@
-require_relative 'instancecounter'
+# frozen_string_literal: true
 
+# Major class Route
 class Route
   attr_reader :departure_station, :arrival_station
   attr_accessor :way_stations
@@ -46,11 +47,11 @@ class Route
 
   def self.valid_station!(station)
     puts "station: #{station}"
-    raise StandardError, 'Objects is not a Station' unless station.kind_of?(Station)
+    raise StandardError, 'Objects is not a Station' unless station.is_a?(Station)
   end
 
   def self.enough_stations
-    raise StandartError, 'You need two stations if you want create a route' if Station.stations.size < 2 
+    raise StandartError, 'You need two stations if you want create a route' if Station.stations.size < 2
   end
 
   def add_station(station)
@@ -58,7 +59,7 @@ class Route
     @way_stations << station
   end
 
-  def delete_station(station) 
+  def delete_station(station)
     raise StandardError, 'You cannot delete departure station' if station == @departure_station
 
     raise StandardError, 'You cannot delete arrival station' if station == @arrival_station
@@ -78,9 +79,9 @@ class Route
 
   def stations_show(hash)
     if !hash.nil?
-      hash.each{|key, value| puts"key #{key} value #{value}"}
+      hash.each { |key, value| puts "key #{key} value #{value}" }
     else
-      puts 'No station to adding' 
+      puts 'No station to adding'
     end
   end
 end

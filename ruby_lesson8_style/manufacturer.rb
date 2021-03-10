@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Manufacturer
   module InstanceMethods
     attr_accessor :manufacturer
