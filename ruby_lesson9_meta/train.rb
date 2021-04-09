@@ -98,7 +98,7 @@ class Train
   end
 
   def add_route(route)
-    raise ArgumentError, 'Argument is not a Route' if self.class.validate route, :type, :Route
+    raise ArgumentError, 'Argument is not a Route' unless self.class.validate route, :type, :Route
 
     @route = route
     change_station(route.departure_station)

@@ -24,17 +24,19 @@ module Accessors
     end
   end
 
-  def strong_attr_accessor(name)
-    var_name = "@#{name}".to_sym
+  def strong_attr_accessor(*arg)
+    raise ArgumentError, 'No class name' if arg[1].nil?
 
-    define_method(name) do
+    var_name = "@#{arg[0]}".to_sym
+
+    define_method(arg[0]) do
       instance_variable_get(var_name)
     end
 
-    define_method("#{name}=") do |value|
-      raise ArgumentError, 'wrong class of value' unless value[0].class != value[1]
+    define_method("#{arg[0]}=") do |value|
+      raise ArgumentError, 'wrong class of value' unless value.instance_of?(Object.const_get(klass))
 
-      instance_variable_set(var_name, value[0])
+      instance_variable_set(var_name, value)
     end
   end
 end
