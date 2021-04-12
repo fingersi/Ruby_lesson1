@@ -2,7 +2,10 @@
 AllCops:
   Exclude:
     - config/initializers/secret_token.rb
-    
+
+
+#Metrics/AbcSize:
+#  Enabled: false
 
 Style/FrozenStringLiteralComment:
   Enabled: false

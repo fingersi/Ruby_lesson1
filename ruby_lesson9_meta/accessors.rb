@@ -1,5 +1,4 @@
 module Accessors
-
   def attr_accessor_with_history(*names)
     names.each do |name|
       var_name = "@#{name}".to_sym
@@ -25,18 +24,21 @@ module Accessors
   end
 
   def strong_attr_accessor(*arg)
-    raise ArgumentError, 'No class name' if arg[1].nil?
+    arg.each_with_index do |argument, index|
+      next if index.odd?
 
-    var_name = "@#{arg[0]}".to_sym
+      var_name = "@#{argument}".to_sym
 
-    define_method(arg[0]) do
-      instance_variable_get(var_name)
-    end
+      define_method(argument) do
+        instance_variable_get(var_name)
+      end
 
-    define_method("#{arg[0]}=") do |value|
-      raise ArgumentError, 'wrong class of value' unless value.instance_of?(Object.const_get(klass))
+      define_method("#{argument}=") do |value|
+        klass = arg[index + 1]
+        raise ArgumentError, 'wrong class of value' unless value.instance_of?(Object.const_get(klass))
 
-      instance_variable_set(var_name, value)
+        instance_variable_set(var_name, value)
+      end
     end
   end
 end
