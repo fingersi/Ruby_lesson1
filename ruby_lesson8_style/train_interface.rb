@@ -40,7 +40,7 @@ class TrainInterface
   def show_train_cars(train)
     train.train_cars.each_with_index do |train_car, index|
       puts "Train car: #{index} number: #{train_car.number} type: #{train_car.type
-                                                                  } load: #{train_car.load} free: #{train_car.free}"
+            } load: #{train_car.load} free: #{train_car.free}"
     end
   end
 

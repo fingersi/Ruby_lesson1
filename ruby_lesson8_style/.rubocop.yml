@@ -2,8 +2,6 @@ AllCops:
   Exclude:
     - config/initializers/secret_token.rb
     
-
-
 Style/FrozenStringLiteralComment:
   Enabled: false
 

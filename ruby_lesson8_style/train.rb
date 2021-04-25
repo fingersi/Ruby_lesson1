@@ -4,6 +4,9 @@ require_relative 'manufacturer'
 require_relative 'instancecounter'
 
 class Train
+  extend Accessors
+  extend Validation::ClassMethods
+  include Validation::InstanceMethods
   extend Manufacturer::ClassMethods
   include Manufacturer::InstanceMethods
   include ExceptionHadler

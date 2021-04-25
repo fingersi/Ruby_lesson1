@@ -1,8 +1,14 @@
 module Validation
   module ClassMethods
-    def validate(value, type, data = nil)
+
+    def validate(attr, type, *options)
       raise ArgumentError, 'type is not a symbol' unless type.is_a?(Symbol)
 
+      @validations ||= []
+      @validations << { attr: attr, type: type, options: options } 
+    end
+
+    def blabla
       var = right_var(value)
       case type
       when :presence
@@ -47,22 +53,27 @@ module Validation
   end
 
   module InstanceMethods
-    def validate!(value, format = nil, type = nil)
-      raise TypeError, 'value is nil' if self.class.validate(value, :p)
 
-      raise TypeError, 'format is nil' if format.nil?
 
-      raise TypeError, 'format of value id wrong' if self.class.validate(value, :f, format)
+    def validate!
 
-      raise TypeError, 'wrong type of value' if self.class.validate(value, :t, type)
-    end
+      @validations.each do |hash|
 
-    def validate?(value, format = nil, type = nil)
-      alidate!(value, format, type)
-      true
-    rescue TypeError => e
-      exeption_hadler(e)
-      false
+        puts "hash['type'] #{hash['type']}"
+
+        puts "hash['type'] #{hash['attr']}"
+
+        puts "hash['type'] #{hash['options']}"
+
+        #raise TypeError, 'value is nil' if self.class.validate(value, :p)
+
+        #raise TypeError, 'format is nil' if format.nil?
+
+        #raise TypeError, 'format of value id wrong' if self.class.validate(value, :f, format)
+
+        #raise TypeError, 'wrong type of value' if self.class.validate(value, :t, type)
+      end
+
     end
   end
 end

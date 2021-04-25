@@ -1,3 +1,5 @@
+require_relative 'validation'
+require_relative ''
 require_relative 'exceptionhadler'
 require_relative 'manufacturer'
 require_relative 'text2'
