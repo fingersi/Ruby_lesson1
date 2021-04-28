@@ -28,6 +28,7 @@ class Train
     self.class.add_train(self)
     register_instance
     self.class.valid?(number)
+    validate!
   end
 
   def self.add_train(train)
@@ -55,10 +56,10 @@ class Train
   end
 
   def self.valid!(number)
-    raise StandardError, 'Input something, bitch.' unless validate number, :presence
+    raise StandardError, 'Input something, bitch.' if number.nil?
 
-    raise StandardError, 'Train number should have 3 russian letters or digits - and 2 letters or digits ' unless
-     validate number, :format, TRAIN_NUMBER_FORMAT
+    raise StandardError, 'Train number should have 3 russian letters or digits - and 2 letters or digits ' if
+     number !~ TRAIN_NUMBER_FORMAT
   end
 
   def self.valid_train_cars!(value)
@@ -81,7 +82,7 @@ class Train
   end
 
   def add_train_car(train_car)
-    raise ArgumentError, 'Argument is not a TrainCar' if self.class.validate train_car, :type, :TrainCar
+    # raise ArgumentError, 'Argument is not a TrainCar' if self.class.validate train_car, :type, :TrainCar
 
     raise StandardError, 'Cannot add train car. Wrong train car type or train has speed.' unless
      @type == train_car.type && @speed.zero?
@@ -98,18 +99,19 @@ class Train
   end
 
   def add_route(route)
-    raise ArgumentError, 'Argument is not a Route' unless self.class.validate route, :type, :Route
+    puts "route.instance_of? Route #{route.instance_of? Route}"
+    raise ArgumentError, 'Argument is not a Route' unless route.instance_of? Route
 
     @route = route
     change_station(route.departure_station)
-    puts "Train has moved to #{@current_station.name}"
+    puts "Train has moved to #{current_station&.name}"
   end
 
   def next_station
     raise StandardError, 'Train has no route' if @route.nil?
 
     route_stations = @route.stations
-    st_index = route_stations.index(@current_station)
+    st_index = route_stations.index(current_station)
     st_index == route_stations.size ? (return nil) : @route.stations[st_index + 1]
   end
 
@@ -117,14 +119,15 @@ class Train
     raise StandardError, 'Train has no route' if @route.nil?
 
     route_stations = @route.stations
-    st_index = route_stations.index(@current_station)
+    st_index = route_stations.index(current_station)
     st_index.zero? ? (return nil) : (route_stations[st_index - 1])
   end
 
   def change_station(station)
-    @current_station&.train_departure(self)
+    puts "before current_station #{current_station}"
+    current_station&.train_departure(self)
     station.train_arrive(self)
-    @current_station = station
+    self.current_station = station
     station
   end
 end

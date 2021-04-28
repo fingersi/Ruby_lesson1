@@ -28,12 +28,14 @@ class Main
   end
 
   def start_routes(st1, st2, st3, st4, st5)
+    puts 'Create routes'
     route1 = Route.new(st1, st2)
     route1.add_station(st3)
     route1.add_station(st4)
     route1.add_station(st5)
     route2 = Route.new(st2, st1)
     route2.add_station(st3)
+    puts 'routes created'
     start_trains(route1, route2)
   end
 

@@ -1,23 +1,26 @@
 module Validation
   module ClassMethods
-
     def validate(attr, type, *options)
       raise ArgumentError, 'type is not a symbol' unless type.is_a?(Symbol)
 
       @validations ||= []
-      @validations << { attr: attr, type: type, options: options } 
+      @validations << { attr: attr, type: type, options: options }
     end
 
-    def blabla
-      var = right_var(value)
-      case type
-      when :presence
-        return true unless var.nil?
-      when :format
-        return check_format(var, data)
-      when :type
-        return check_type(var, data)
-      end
+    def validations
+      @validations ||= []
+      @validations
+    end
+  end
+
+  module InstanceMethods
+    def validations
+      self.class.validations
+    end
+
+    def check_type(var, klass)
+      return true if var.instance_of?(Object.const_get(klass))
+
       false
     end
 
@@ -37,43 +40,37 @@ module Validation
       end
     end
 
-    def right_var(value)
-      if value.instance_of?(Symbol)
-        instance_variable_get(value)
-      else
-        value
-      end
+    def presence(attr)
+      raise StandartError 'instance variable is nil' if instance_variable_get("@#{attr}").nil?
+
+      true
     end
-
-    def check_type(var, klass)
-      return true if var.instance_of?(Object.const_get(klass))
-
-      false
-    end
-  end
-
-  module InstanceMethods
-
 
     def validate!
-
-      @validations.each do |hash|
-
-        puts "hash['type'] #{hash['type']}"
-
-        puts "hash['type'] #{hash['attr']}"
-
-        puts "hash['type'] #{hash['options']}"
-
-        #raise TypeError, 'value is nil' if self.class.validate(value, :p)
-
-        #raise TypeError, 'format is nil' if format.nil?
-
-        #raise TypeError, 'format of value id wrong' if self.class.validate(value, :f, format)
-
-        #raise TypeError, 'wrong type of value' if self.class.validate(value, :t, type)
+      validations.each do |hash|
+        case hash[:type]
+        when :presence
+          raise TypeError, 'value is nil' unless presence(hash[:attr])
+        when :format
+          raise TypeError, 'format of value id wrong' if check_format(hash[:attr], hash[:options][0])
+        when :type
+          raise TypeError, 'wrong type of value' if check_type(hash[:attr], hash[:options][0])
+        end
       end
+    end
 
+    def validate? 
+      validations.each do |hash|
+        case hash[:type]
+        when :presence
+          return false unless presence(hash[:attr])
+        when :format
+          return false if check_format(hash[:attr], hash[:options][0])
+        when :type
+          return false if check_type(hash[:attr], hash[:options][0])
+        end
+      end
+      true
     end
   end
 end

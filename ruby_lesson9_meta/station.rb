@@ -9,6 +9,7 @@ class Station
 
   extend InstanceCounter::ClassMethods
   include InstanceCounter::InstanceMethods
+  extend Accessors
 
   @@stations = []
 

@@ -50,8 +50,8 @@ class TrainInterface
     train.prev_station.nil? ? (puts @texts.first_station) : (puts "Previous station is #{train.route[st_index - 1]}")
   end
 
-  def show_current_station
-    @current_staion.nil? ? (puts 'Train is in nowhere.') : (puts "Train's current station is: #{@current_station.name}")
+  def show_current_station(train)
+    train.current_staion.nil? ? (puts 'Train is in nowhere.') : (puts "Train's current station is: #{train.current_station.name}")
   end
 
   def show_train_cars_number

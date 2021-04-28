@@ -2,13 +2,13 @@ module Accessors
   def attr_accessor_with_history(*names)
     names.each do |name|
       var_name = "@#{name}".to_sym
+      instance_variable_set(var_name, [])
 
       define_method(name) do
-        instance_variable_get(var_name).last
+        instance_variable_get(var_name)&.last
       end
 
       define_setter(name, var_name)
-
       define_method("#{name}_history") do
         instance_variable_get(var_name)
       end
@@ -19,6 +19,8 @@ module Accessors
     define_method("#{name}=") do |value|
       var = instance_variable_get(var_name)
       var ||= []
+      print "var #{var}"
+      print "value #{value}"
       instance_variable_set(var_name, var << value)
     end
   end
