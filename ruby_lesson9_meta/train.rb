@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class Train
   extend Manufacturer::ClassMethods
   include Manufacturer::InstanceMethods
@@ -10,6 +8,7 @@ class Train
   extend Accessors
   extend Validation::ClassMethods
   include Validation::InstanceMethods
+  extend ClassLevelInheritableAttributes::ClassMethods
 
   TRAIN_NUMBER_FORMAT = /^[а-я0-9]{3}([( )|-])?[а-я0-9]{2}$/i.freeze
   TRAIN_CARS_FORMAT = /^[0-9]{1,3}$/.freeze
@@ -18,6 +17,11 @@ class Train
   attr_reader :type, :type_id, :route
 
   attr_accessor_with_history :current_station
+  inheritable_attributes :validations
+
+  validate :number, :presence
+  validate :number, :format, TRAIN_NUMBER_FORMAT
+  validate :number, :type, :String
 
   @@trains = []
 
@@ -27,7 +31,6 @@ class Train
     @train_cars = []
     self.class.add_train(self)
     register_instance
-    self.class.valid?(number)
     validate!
   end
 
@@ -55,13 +58,6 @@ class Train
     false
   end
 
-  def self.valid!(number)
-    raise StandardError, 'Input something, bitch.' if number.nil?
-
-    raise StandardError, 'Train number should have 3 russian letters or digits - and 2 letters or digits ' if
-     number !~ TRAIN_NUMBER_FORMAT
-  end
-
   def self.valid_train_cars!(value)
     int_value = value.to_i
     raise StandardError, 'Input something, bitch' if value.nil?
@@ -82,8 +78,6 @@ class Train
   end
 
   def add_train_car(train_car)
-    # raise ArgumentError, 'Argument is not a TrainCar' if self.class.validate train_car, :type, :TrainCar
-
     raise StandardError, 'Cannot add train car. Wrong train car type or train has speed.' unless
      @type == train_car.type && @speed.zero?
 
@@ -99,7 +93,6 @@ class Train
   end
 
   def add_route(route)
-    puts "route.instance_of? Route #{route.instance_of? Route}"
     raise ArgumentError, 'Argument is not a Route' unless route.instance_of? Route
 
     @route = route
@@ -124,7 +117,6 @@ class Train
   end
 
   def change_station(station)
-    puts "before current_station #{current_station}"
     current_station&.train_departure(self)
     station.train_arrive(self)
     self.current_station = station

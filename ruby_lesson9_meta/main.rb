@@ -1,3 +1,4 @@
+require_relative 'classlevelinheritableattributes'
 require_relative 'accessors'
 require_relative 'validation'
 require_relative 'exceptionhadler'
@@ -25,5 +26,6 @@ require_relative 'user_input_train'
 require_relative 'user_input_route'
 require_relative 'user_input_station'
 require_relative 'main_menu'
+
 
 MainMenu.new

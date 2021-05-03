@@ -99,8 +99,8 @@ class TrainInterface
     puts "#{number} trains cars has been deleted. Now train #{train.number} has #{train.train_cars.size}"
   end
 
-  def show_stations_on_route
-    raise StandardError, 'Trains has no route.' if @current_station.nil?
+  def show_stations_on_route(train)
+    raise StandardError, 'Trains has no route.' if train.current_station.nil?
 
     stations_on_route.each { |station| puts station.name unless station.nil? }
   end

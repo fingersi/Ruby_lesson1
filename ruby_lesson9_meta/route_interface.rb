@@ -1,6 +1,3 @@
-# frozen_string_literal: true
-
-# All methods for route class
 class RouteInterface
   include ExceptionHadler
 

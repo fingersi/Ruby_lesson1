@@ -1,21 +1,25 @@
 # frozen_string_literal: true
 
-require_relative 'instancecounter'
-
 class Station
+
   attr_reader :name, :trains
 
   STATION_NAME_FORMAT = /^[а-я0-9]*([( )|-])?[а-я0-9]*$/i.freeze
 
   extend InstanceCounter::ClassMethods
   include InstanceCounter::InstanceMethods
+  extend Validation::ClassMethods
+  include Validation::InstanceMethods
   extend Accessors
+
+  validate :name, :presence
+  validate :name, :format, STATION_NAME_FORMAT
 
   @@stations = []
 
   def initialize(name)
-    valid!(name)
     @name = name
+    validate!
     @trains = []
     @@stations << self
     register_instance

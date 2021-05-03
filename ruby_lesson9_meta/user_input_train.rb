@@ -53,7 +53,7 @@ class UserInputTrain < UserInput
     loop do
       puts @texts.create_train_number
       train_number = gets.chomp
-      return train_number if Train.valid?(train_number)
+      return train_number if Train.check_attr?(:number, train_number)
     end
   end
 

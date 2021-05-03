@@ -1,21 +1,26 @@
-# frozen_string_literal: true
 
-# Major class Route
 class Route
   attr_reader :departure_station, :arrival_station
   attr_accessor :way_stations
 
   include ExceptionHadler
+  extend ExceptionHadler
   extend InstanceCounter::ClassMethods
   include InstanceCounter::InstanceMethods
+  extend Validation::ClassMethods
+  include Validation::InstanceMethods
+
+  validate :departure_station, :presence
+  validate :departure_station, :type, :Station
+  validate :arrival_station, :presence
+  validate :departure_station, :type, :Station
 
   @@routes = []
 
   def initialize(departure_station, arrival_station)
-    self.class.valid_station!(arrival_station)
-    self.class.valid_station!(departure_station)
     @departure_station = departure_station
     @arrival_station = arrival_station
+    validate!
     @way_stations = []
     @@routes << self
     register_instance
@@ -25,7 +30,7 @@ class Route
     valid_station!(station)
     true
   rescue StandardError => e
-    ExceptionHadler(e)
+    exeption_hadler(e)
     false
   end
 
@@ -33,7 +38,7 @@ class Route
     index_valid!(index)
     true
   rescue StandardError => e
-    ExceptionHadler(e)
+    exeption_hadler(e)
     false
   end
 
